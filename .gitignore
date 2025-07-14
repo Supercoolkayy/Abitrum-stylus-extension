@@ -2,8 +2,6 @@ out
 dist
 node_modules
 .vscode-test/
-*.vsix
-
 
 .vscode/**
 .vscode-test/**
@@ -11,9 +9,5 @@ node_modules/**
 .yarnrc
 
 **/.vscode-test.*
-package-robust.js
-test-packaging.js
-build-and-test.sh
-build-milestone1.sh
 arbitrum-stylus-extension/**
 
