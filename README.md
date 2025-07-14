@@ -115,10 +115,10 @@ arbitrum-stylus/
 
 ### [LIST] **Next Steps (Future Milestones)**
 
-- **Milestone 2**: Advanced Language Features (hover info, diagnostics)
-- **Milestone 3**: Debugging Support
-- **Milestone 4**: Testing Integration
-- **Milestone 5**: Deployment Tools
+- **Milestone 2**: 
+- **Milestone 3**: 
+- **Milestone 4**: 
+- **Milestone 5**: 
 
 ### [HANDSHAKE] **Contributing**
 
