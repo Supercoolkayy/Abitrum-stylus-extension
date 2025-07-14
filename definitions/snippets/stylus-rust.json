@@ -1,0 +1,384 @@
+{
+  "Basic Storage Contract": {
+    "prefix": "stylus-storage",
+    "body": [
+      "use stylus_sdk::{prelude::*, storage::*};",
+      "use alloy_primitives::{Address, U256};",
+      "",
+      "#[storage]",
+      "pub struct ${1:ContractName} {",
+      "    ${2:field_name}: Storage${3|U256,Address,String,Bool|},",
+      "}",
+      "",
+      "#[external]",
+      "impl ${1:ContractName} {",
+      "    pub fn ${4:function_name}(&${5|self,mut self|}) -> Result<${6:()}, Vec<u8>> {",
+      "        ${7:// Implementation}",
+      "        Ok(${8:()})",
+      "    }",
+      "}"
+    ],
+    "description": "Basic Stylus storage contract template"
+  },
+
+  "Advanced Storage Contract": {
+    "prefix": "stylus-advanced",
+    "body": [
+      "use stylus_sdk::{prelude::*, storage::*, call::*, evm};",
+      "use alloy_primitives::{Address, U256, B256, Bytes};",
+      "use alloy_sol_types::{sol, SolError, SolEvent};",
+      "",
+      "sol! {",
+      "    event ${1:EventName}(",
+      "        address indexed user,",
+      "        uint256 value",
+      "    );",
+      "    ",
+      "    error ${2:ErrorName}(string reason);",
+      "}",
+      "",
+      "#[storage]",
+      "pub struct ${3:ContractName} {",
+      "    owner: StorageAddress,",
+      "    ${4:balances}: StorageMap<Address, U256>,",
+      "    ${5:total_supply}: StorageU256,",
+      "}",
+      "",
+      "#[external]",
+      "impl ${3:ContractName} {",
+      "    pub fn new() -> Self {",
+      "        Self {",
+      "            owner: StorageAddress::new(),",
+      "            ${4:balances}: StorageMap::new(),",
+      "            ${5:total_supply}: StorageU256::new(),",
+      "        }",
+      "    }",
+      "",
+      "    fn only_owner(&self) -> Result<(), Vec<u8>> {",
+      "        if msg::sender() != self.owner.get() {",
+      "            return Err(${2:ErrorName} {",
+      "                reason: \"Not authorized\".to_string(),",
+      "            }.encode());",
+      "        }",
+      "        Ok(())",
+      "    }",
+      "}"
+    ],
+    "description": "Advanced Stylus contract with events, errors, and access control"
+  },
+
+  "View Function": {
+    "prefix": "stylus-view",
+    "body": [
+      "#[view]",
+      "pub fn ${1:function_name}(&self) -> ${2:U256} {",
+      "    ${3:// Implementation}",
+      "    ${4:self.field.get()}",
+      "}"
+    ],
+    "description": "View function that doesn't modify state"
+  },
+
+  "Payable Function": {
+    "prefix": "stylus-payable",
+    "body": [
+      "#[payable]",
+      "pub fn ${1:function_name}(&mut self) -> Result<${2:()}, Vec<u8>> {",
+      "    let value = msg::value();",
+      "    ${3:// Implementation}",
+      "    Ok(${4:()})",
+      "}"
+    ],
+    "description": "Payable function that can receive ETH"
+  },
+
+  "Storage Map": {
+    "prefix": "stylus-map",
+    "body": [
+      "${1:field_name}: StorageMap<${2:Address}, ${3:U256}>,"
+    ],
+    "description": "Storage map field declaration"
+  },
+
+  "Storage Array": {
+    "prefix": "stylus-array",
+    "body": [
+      "${1:field_name}: StorageVec<${2:Address}>,"
+    ],
+    "description": "Storage array field declaration"
+  },
+
+  "Event Declaration": {
+    "prefix": "stylus-event",
+    "body": [
+      "sol! {",
+      "    event ${1:EventName}(",
+      "        ${2:address indexed user},",
+      "        ${3:uint256 value}",
+      "    );",
+      "}"
+    ],
+    "description": "Solidity event declaration"
+  },
+
+  "Custom Error": {
+    "prefix": "stylus-error",
+    "body": [
+      "sol! {",
+      "    error ${1:ErrorName}(${2:string reason});",
+      "}",
+      "",
+      "// Usage:",
+      "return Err(${1:ErrorName} {",
+      "    reason: \"${3:Error message}\".to_string(),",
+      "}.encode());"
+    ],
+    "description": "Custom error definition and usage"
+  },
+
+  "Contract Constructor": {
+    "prefix": "stylus-constructor",
+    "body": [
+      "impl ${1:ContractName} {",
+      "    pub fn new() -> Self {",
+      "        Self {",
+      "            ${2:field_name}: ${3:StorageU256::new()},",
+      "        }",
+      "    }",
+      "}"
+    ],
+    "description": "Contract constructor implementation"
+  },
+
+  "Access Control": {
+    "prefix": "stylus-access",
+    "body": [
+      "fn only_owner(&self) -> Result<(), Vec<u8>> {",
+      "    if msg::sender() != self.owner.get() {",
+      "        return Err(\"Not authorized\".as_bytes().to_vec());",
+      "    }",
+      "    Ok(())",
+      "}"
+    ],
+    "description": "Access control modifier pattern"
+  },
+
+  "Safe Math Operations": {
+    "prefix": "stylus-math",
+    "body": [
+      "let result = ${1:value1}",
+      "    .checked_${2|add,sub,mul,div|}(${3:value2})",
+      "    .ok_or(\"${4:Arithmetic overflow}\".as_bytes().to_vec())?;"
+    ],
+    "description": "Safe arithmetic operations"
+  },
+
+  "Interface Declaration": {
+    "prefix": "stylus-interface",
+    "body": [
+      "sol_interface! {",
+      "    interface I${1:InterfaceName} {",
+      "        function ${2:functionName}(${3:uint256 param}) external ${4|view,pure,payable,|} returns (${5:uint256});",
+      "    }",
+      "}"
+    ],
+    "description": "Solidity interface declaration"
+  },
+
+  "Import Block": {
+    "prefix": "stylus-imports",
+    "body": [
+      "use stylus_sdk::{prelude::*, storage::*, call::*, evm};",
+      "use alloy_primitives::{Address, U256, B256, Bytes};",
+      "use alloy_sol_types::{sol, SolError, SolEvent};"
+    ],
+    "description": "Common Stylus imports"
+  },
+
+  "ERC20 Token": {
+    "prefix": "stylus-erc20",
+    "body": [
+      "use stylus_sdk::{prelude::*, storage::*};",
+      "use alloy_primitives::{Address, U256};",
+      "",
+      "sol! {",
+      "    event Transfer(address indexed from, address indexed to, uint256 value);",
+      "    event Approval(address indexed owner, address indexed spender, uint256 value);",
+      "    ",
+      "    error InsufficientBalance(address from, uint256 requested, uint256 available);",
+      "    error InsufficientAllowance(address owner, address spender, uint256 requested, uint256 available);",
+      "}",
+      "",
+      "#[storage]",
+      "pub struct ${1:TokenName} {",
+      "    name: StorageString,",
+      "    symbol: StorageString,",
+      "    decimals: StorageU256,",
+      "    total_supply: StorageU256,",
+      "    balances: StorageMap<Address, U256>,",
+      "    allowances: StorageMap<Address, StorageMap<Address, U256>>,",
+      "}",
+      "",
+      "#[external]",
+      "impl ${1:TokenName} {",
+      "    pub fn new(name: String, symbol: String, decimals: U256, initial_supply: U256) -> Self {",
+      "        let mut contract = Self {",
+      "            name: StorageString::new(),",
+      "            symbol: StorageString::new(),",
+      "            decimals: StorageU256::new(),",
+      "            total_supply: StorageU256::new(),",
+      "            balances: StorageMap::new(),",
+      "            allowances: StorageMap::new(),",
+      "        };",
+      "        contract.name.set(name);",
+      "        contract.symbol.set(symbol);",
+      "        contract.decimals.set(decimals);",
+      "        contract.total_supply.set(initial_supply);",
+      "        contract.balances.set(msg::sender(), initial_supply);",
+      "        contract",
+      "    }",
+      "",
+      "    #[view]",
+      "    pub fn name(&self) -> String {",
+      "        self.name.get()",
+      "    }",
+      "",
+      "    #[view]",
+      "    pub fn symbol(&self) -> String {",
+      "        self.symbol.get()",
+      "    }",
+      "",
+      "    #[view]",
+      "    pub fn decimals(&self) -> U256 {",
+      "        self.decimals.get()",
+      "    }",
+      "",
+      "    #[view]",
+      "    pub fn total_supply(&self) -> U256 {",
+      "        self.total_supply.get()",
+      "    }",
+      "",
+      "    #[view]",
+      "    pub fn balance_of(&self, account: Address) -> U256 {",
+      "        self.balances.get(account)",
+      "    }",
+      "",
+      "    pub fn transfer(&mut self, to: Address, amount: U256) -> Result<(), Vec<u8>> {",
+      "        let from = msg::sender();",
+      "        let from_balance = self.balances.get(from);",
+      "        ",
+      "        if from_balance < amount {",
+      "            return Err(InsufficientBalance {",
+      "                from,",
+      "                requested: amount,",
+      "                available: from_balance,",
+      "            }.encode());",
+      "        }",
+      "        ",
+      "        self.balances.set(from, from_balance - amount);",
+      "        self.balances.set(to, self.balances.get(to) + amount);",
+      "        ",
+      "        evm::log(Transfer { from, to, value: amount });",
+      "        Ok(())",
+      "    }",
+      "}"
+    ],
+    "description": "Complete ERC20 token implementation"
+  },
+
+  "Reentrancy Guard": {
+    "prefix": "stylus-reentrancy",
+    "body": [
+      "#[storage]",
+      "pub struct ${1:ContractName} {",
+      "    ${2:locked}: StorageBool,",
+      "    ${3:// other fields}",
+      "}",
+      "",
+      "impl ${1:ContractName} {",
+      "    fn non_reentrant(&mut self) -> Result<(), Vec<u8>> {",
+      "        if self.${2:locked}.get() {",
+      "            return Err(\"Reentrant call\".as_bytes().to_vec());",
+      "        }",
+      "        self.${2:locked}.set(true);",
+      "        Ok(())",
+      "    }",
+      "    ",
+      "    fn release_lock(&mut self) {",
+      "        self.${2:locked}.set(false);",
+      "    }",
+      "}"
+    ],
+    "description": "Reentrancy protection pattern"
+  },
+
+  "Pausable Contract": {
+    "prefix": "stylus-pausable",
+    "body": [
+      "#[storage]",
+      "pub struct ${1:ContractName} {",
+      "    paused: StorageBool,",
+      "    owner: StorageAddress,",
+      "    ${2:// other fields}",
+      "}",
+      "",
+      "impl ${1:ContractName} {",
+      "    fn when_not_paused(&self) -> Result<(), Vec<u8>> {",
+      "        if self.paused.get() {",
+      "            return Err(\"Contract is paused\".as_bytes().to_vec());",
+      "        }",
+      "        Ok(())",
+      "    }",
+      "    ",
+      "    pub fn pause(&mut self) -> Result<(), Vec<u8>> {",
+      "        if msg::sender() != self.owner.get() {",
+      "            return Err(\"Not authorized\".as_bytes().to_vec());",
+      "        }",
+      "        self.paused.set(true);",
+      "        Ok(())",
+      "    }",
+      "    ",
+      "    pub fn unpause(&mut self) -> Result<(), Vec<u8>> {",
+      "        if msg::sender() != self.owner.get() {",
+      "            return Err(\"Not authorized\".as_bytes().to_vec());",
+      "        }",
+      "        self.paused.set(false);",
+      "        Ok(())",
+      "    }",
+      "}"
+    ],
+    "description": "Pausable contract pattern"
+  },
+
+  "Gas Optimization": {
+    "prefix": "stylus-gas-opt",
+    "body": [
+      "// Gas optimization: Use unchecked for known safe operations",
+      "let result = ${1:value1}.unchecked_${2|add,sub,mul,div|}(${3:value2});",
+      "",
+      "// Gas optimization: Pack related storage variables",
+      "// Consider using bit packing for small values",
+      "// Use events instead of storage for historical data"
+    ],
+    "description": "Gas optimization patterns and tips"
+  },
+
+  "Test Function": {
+    "prefix": "stylus-test",
+    "body": [
+      "#[cfg(test)]",
+      "mod tests {",
+      "    use super::*;",
+      "    use stylus_sdk::testing::*;",
+      "    ",
+      "    #[test]",
+      "    fn test_${1:function_name}() {",
+      "        let mut contract = ${2:ContractName}::new();",
+      "        ${3:// Test implementation}",
+      "        assert_eq!(${4:expected}, ${5:actual});",
+      "    }",
+      "}"
+    ],
+    "description": "Test function template"
+  }
+}

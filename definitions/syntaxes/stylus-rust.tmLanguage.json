@@ -1,0 +1,129 @@
+{
+    "name": "Stylus Rust",
+    "scopeName": "source.stylus.rust",
+    "fileTypes": ["rs"],
+    "patterns": [
+      {
+        "include": "#stylus-specific"
+      },
+      {
+        "include": "source.rust"
+      }
+    ],
+    "repository": {
+      "stylus-specific": {
+        "patterns": [
+          {
+            "include": "#stylus-imports"
+          },
+          {
+            "include": "#stylus-macros"
+          },
+          {
+            "include": "#stylus-attributes"
+          },
+          {
+            "include": "#stylus-types"
+          },
+          {
+            "include": "#stylus-functions"
+          },
+          {
+            "include": "#stylus-events"
+          },
+          {
+            "include": "#stylus-errors"
+          }
+        ]
+      },
+      "stylus-imports": {
+        "patterns": [
+          {
+            "match": "\\b(use)\\s+(stylus_sdk|alloy_primitives|alloy_sol_types)\\b",
+            "captures": {
+              "1": {
+                "name": "keyword.control.import.rust"
+              },
+              "2": {
+                "name": "entity.name.namespace.stylus"
+              }
+            }
+          }
+        ]
+      },
+      "stylus-macros": {
+        "patterns": [
+          {
+            "match": "#\\[(?:external|payable|pure|view|storage|entrypoint|inherit)\\]",
+            "name": "meta.attribute.stylus"
+          },
+          {
+            "match": "\\b(sol_storage|sol_interface|sol!)\\b",
+            "name": "entity.name.function.macro.stylus"
+          }
+        ]
+      },
+      "stylus-attributes": {
+        "patterns": [
+          {
+            "match": "#\\[(?:solidity|selector|topic)\\([^)]*\\)\\]",
+            "name": "meta.attribute.stylus.solidity"
+          }
+        ]
+      },
+      "stylus-types": {
+        "patterns": [
+          {
+            "match": "\\b(Address|U256|B256|Bytes|String|FixedBytes)\\b",
+            "name": "entity.name.type.stylus"
+          },
+          {
+            "match": "\\b(StorageMap|StorageArray|StorageVec|StorageString|StorageU256|StorageAddress|StorageBool)\\b",
+            "name": "entity.name.type.storage.stylus"
+          }
+        ]
+      },
+      "stylus-functions": {
+        "patterns": [
+          {
+            "match": "\\b(msg|block|tx|call|delegatecall|staticcall)\\b",
+            "name": "entity.name.function.builtin.stylus"
+          }
+        ]
+      },
+      "stylus-events": {
+        "patterns": [
+          {
+            "begin": "sol!\\s*\\{",
+            "end": "\\}",
+            "name": "meta.block.solidity.stylus",
+            "patterns": [
+              {
+                "match": "\\bevent\\b",
+                "name": "keyword.other.event.stylus"
+              },
+              {
+                "match": "\\b(?:indexed|anonymous)\\b",
+                "name": "keyword.other.event.modifier.stylus"
+              }
+            ]
+          }
+        ]
+      },
+      "stylus-errors": {
+        "patterns": [
+          {
+            "begin": "sol!\\s*\\{",
+            "end": "\\}",
+            "name": "meta.block.solidity.error.stylus",
+            "patterns": [
+              {
+                "match": "\\berror\\b",
+                "name": "keyword.other.error.stylus"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  } 
